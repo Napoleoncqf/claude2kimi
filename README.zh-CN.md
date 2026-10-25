@@ -8,10 +8,16 @@
 它是 [claude2codex](https://github.com/Napoleoncqf/claude2codex) 的 Kimi 版：派单方还是 Claude，工人换成 Kimi。
 装好后是一个 Claude Code skill，文件夹名叫 `dispatch-kimi`，由三个脚本组成，不需要常驻服务。
 
+推荐分工：Claude 规划和执行，Kimi 只做复审。用 `--ro` 派审，返工后用 `--resume` 在同一会话里复审，
+它记得上一轮提了什么，可以逐条核对。审查 brief 模板和 Claude 回应发现的规矩写在 [SKILL.md](SKILL.md)。
+脚本本身不限用途，去掉 `--ro` 也能派执行单。
+
 ## 它能做什么
 
 | 你想… | 命令 | 效果 |
 |---|---|---|
+| 派一单复审 | `kimi_task.sh --ro -f review.md` | 起一个无头 `kimi -p`（explore agent，没有 Write/Edit），跑完 stdout 打审查报告 |
+| 返工后复审 | `kimi_task.sh --resume <session-id> -p "…"` | 接着原会话审，逐条核对上一轮的发现 |
 | 派一单活 | `kimi_task.sh -f brief.md` | 起一个无头 `kimi -p`，跑完 stdout 打最终答复 |
 | 运行中给工人捎一句话 | `kimi_msg.py send` | 工人下一次调工具前读到（那次调用被拦下，读完重发） |
 | 让工人先停下回话 | `kimi_msg.py send --stop` | 工人回话前，别的工具调用都会被拦下 |

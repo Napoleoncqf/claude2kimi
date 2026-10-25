@@ -9,10 +9,17 @@ This is the Kimi port of [claude2codex](https://github.com/Napoleoncqf/claude2co
 the work. The worker is now Kimi instead of Codex. It installs as a Claude Code skill (folder name
 `dispatch-kimi`) made of three scripts. Nothing runs in the background.
 
+Suggested split: Claude plans and implements, Kimi only reviews. Dispatch a review with `--ro`; after the fixes,
+use `--resume` to re-review in the same session, so Kimi can check its earlier findings one by one. The review
+brief template and the rules for how Claude answers findings are in [SKILL.md](SKILL.md) (in Chinese). The
+scripts work for any job: drop `--ro` to dispatch implementation work.
+
 ## What it does
 
 | You want to… | Command | What happens |
 |---|---|---|
+| Dispatch a review | `kimi_task.sh --ro -f review.md` | Starts a headless `kimi -p` (explore agent, no Write/Edit); prints the review on stdout when done |
+| Re-review after fixes | `kimi_task.sh --resume <session-id> -p "…"` | Continues the review session and checks each earlier finding |
 | Dispatch a job | `kimi_task.sh -f brief.md` | Starts a headless `kimi -p`; prints the final answer on stdout when done |
 | Tell the worker something mid-run | `kimi_msg.py send` | The worker reads it right before its next tool call. That call is blocked, and the worker re-sends it after reading |
 | Make the worker stop and reply | `kimi_msg.py send --stop` | Every tool call is blocked until the worker replies |
